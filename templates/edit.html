@@ -1,0 +1,8 @@
+<h1>Welcome to Editor Screen</h1>
+<br>
+<h3>You are Editing - {{.Title}}.txt</h3>
+
+<form action="/save" method="POST">
+    <div><textarea name="body" rows="25" cols="180">{{printf "%s" .Text}}</textarea></div>
+    <div><input type="submit" value="Save"></div>
+</form>
