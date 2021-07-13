@@ -5,12 +5,22 @@ import (
 	"html/template"
 	"io/ioutil"
 	"net/http"
+	"os"
 	"strings"
 )
 
 type Editor struct {
 	Title string
 	Text  []byte
+}
+
+func (editor *Editor) save() error {
+	dir, _ := os.Getwd()
+	os.Chdir(dir + "/files")
+	filename := editor.Title + ".txt"
+	err := ioutil.WriteFile(filename, editor.Text, 0600)
+	os.Chdir(dir)
+	return err
 }
 
 func loadPage(title string) (*Editor, error) {
@@ -43,8 +53,14 @@ func editHandler(w http.ResponseWriter, r *http.Request, title string) {
 	renderTemplate(w, "edit", editor)
 }
 
-func saveHandler(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintf(w, "This is a Save Page.")
+func saveHandler(w http.ResponseWriter, r *http.Request, title string) {
+	body := r.FormValue("body")
+	editor := &Editor{Title: title, Text: []byte(body)}
+	err := editor.save()
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
 }
 
 func makeHandler(function func(http.ResponseWriter, *http.Request, string)) http.HandlerFunc {
@@ -61,6 +77,6 @@ func makeHandler(function func(http.ResponseWriter, *http.Request, string)) http
 func main() {
 	http.HandleFunc("/view", viewHandler)
 	http.HandleFunc("/edit/", makeHandler(editHandler))
-	http.HandleFunc("/save", saveHandler)
-	http.ListenAndServe(":8040", nil)
+	http.HandleFunc("/save/", makeHandler(saveHandler))
+	http.ListenAndServe(":8030", nil)
 }
