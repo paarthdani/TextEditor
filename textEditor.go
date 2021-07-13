@@ -35,6 +35,7 @@ func viewHandler(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintf(w, "This is a View Page.")
 }
 
+
 func editHandler(w http.ResponseWriter, r *http.Request, title string) {
 	editor, err := loadPage(title)
 	if err != nil {
