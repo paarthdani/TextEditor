@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"html/template"
 	"io/ioutil"
 	"net/http"
@@ -25,7 +24,10 @@ func (editor *Editor) save() error {
 
 func loadPage(title string) (*Editor, error) {
 	filename := title + ".txt"
+	dir, _ := os.Getwd()
+	os.Chdir(dir + "/files")
 	text, err := ioutil.ReadFile(filename)
+	os.Chdir(dir)
 	if err != nil {
 		return nil, err
 	}
@@ -41,8 +43,13 @@ func renderTemplate(w http.ResponseWriter, template string, editor *Editor) {
 	}
 }
 
-func viewHandler(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintf(w, "This is a View Page.")
+func viewHandler(w http.ResponseWriter, r *http.Request, title string) {
+	editor, err := loadPage(title)
+	if err != nil {
+		http.Redirect(w, r, "/edit/"+title, http.StatusFound)
+		return
+	}
+	renderTemplate(w, "view", editor)
 }
 
 func editHandler(w http.ResponseWriter, r *http.Request, title string) {
@@ -61,6 +68,7 @@ func saveHandler(w http.ResponseWriter, r *http.Request, title string) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
+	http.Redirect(w, r, "/view/"+title, http.StatusFound)
 }
 
 func makeHandler(function func(http.ResponseWriter, *http.Request, string)) http.HandlerFunc {
@@ -75,8 +83,8 @@ func makeHandler(function func(http.ResponseWriter, *http.Request, string)) http
 }
 
 func main() {
-	http.HandleFunc("/view", viewHandler)
+	http.HandleFunc("/view/", makeHandler(viewHandler))
 	http.HandleFunc("/edit/", makeHandler(editHandler))
 	http.HandleFunc("/save/", makeHandler(saveHandler))
-	http.ListenAndServe(":8030", nil)
+	http.ListenAndServe(":8070", nil)
 }
