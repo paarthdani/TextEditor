@@ -1,8 +1,39 @@
-<h1>Welcome to Editor Screen</h1>
+<style>
+    .titleLink{
+        margin-left: 1%; 
+        font-size: 25px; 
+        margin-bottom: 10px;
+        color: blue;
+    }
+    .textArea {
+        width: 75%;
+        height: 60%;
+        border: 2px outset black;
+        /* background-color: #dbe9f4; */
+        font-size: medium;
+        font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+        font-weight: normal;
+        margin-left: 1%;
+        padding-left: 1%;
+        padding-right: 1%;
+    }
+    .save{
+        margin-left: 1%;
+        color: black;
+        margin-top: 10px;
+        font-size: 17px;
+        width: 20%;
+        background-color: #dbe9f4;
+        border: 1px outset black;
+        font-weight: bold;
+    }
+</style>
+
+<h1 style="text-align: center;">TextEditor</h1>
 <br>
-<h3>You are Editing - {{.Title}}.txt</h3>
+<h3 class="titleLink">{{.Title}}.txt</h3>
 
 <form action="/save/{{.Title}}" method="POST">
-    <div><textarea name="body" rows="25" cols="180">{{printf "%s" .Text}}</textarea></div>
-    <div><input type="submit" value="Save"></div>
+    <div><textarea name="body" class="textArea">{{printf "%s" .Text}}</textarea></div>
+    <div><input type="submit" value="Save" class="save"></div>
 </form>
