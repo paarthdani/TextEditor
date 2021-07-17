@@ -14,7 +14,7 @@
         border-radius: 10px;
     }
     .titleLink{
-        margin-left: 1%; 
+        margin-left: 2%; 
         font-size: 25px; 
         margin-bottom: 10px;
     }
@@ -33,7 +33,7 @@
 
 <h1 style="text-align: center;">TextEditor</h1>
 <br>
-<h3 class="titleLink"><a style="text-decoration: none; color: blue;" href="/edit/{{.Title}}">Test.txt</a></h3>
+<h3 class="titleLink"><a style="text-decoration: none; color: blue;" href="/edit/{{.Title}}">{{.Title}}.txt</a></h3>
 <div class="textArea">{{printf "%s" .Text}}<br></div>
 <form action="/edit/{{.Title}}" method="POST">
     <div><input type="submit" value="Edit" class="edit"></div>
