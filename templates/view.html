@@ -10,22 +10,31 @@
         margin-left: 1%;
         padding-left: 1%;
         padding-right: 1%;
+        padding-top: 0.5%;
+        border-radius: 10px;
     }
     .titleLink{
         margin-left: 1%; 
         font-size: 25px; 
         margin-bottom: 10px;
     }
-    .ps{
-        margin-left: 1%; 
-        color:red;
-        margin-top: 3px;
-        font-size: 13px;
+    .edit{
+        margin-left: 1%;
+        color: black;
+        margin-top: 10px;
+        font-size: 17px;
+        width: 11%;
+        background-color: darkgrey;
+        border: 1px outset black;
+        font-weight: bold;
+        border-radius: 10px;
     }
 </style>
 
 <h1 style="text-align: center;">TextEditor</h1>
 <br>
-<h3 class="titleLink"><a style="text-decoration: none; color: blue;" href="/edit/{{.Title}}">{{.Title}}.txt</a></h3>
+<h3 class="titleLink"><a style="text-decoration: none; color: blue;" href="/edit/{{.Title}}">Test.txt</a></h3>
 <div class="textArea">{{printf "%s" .Text}}<br></div>
-<p class="ps">(Click the file name to edit the text)</p>
+<form action="/edit/{{.Title}}" method="POST">
+    <div><input type="submit" value="Edit" class="edit"></div>
+</form>
