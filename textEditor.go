@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"html/template"
 	"io/ioutil"
 	"net/http"
@@ -82,7 +83,12 @@ func makeHandler(function func(http.ResponseWriter, *http.Request, string)) http
 	}
 }
 
+func indexHandler(w http.ResponseWriter, r *http.Request) {
+	fmt.Fprintf(w, "this is index place.")
+}
+
 func main() {
+	http.HandleFunc("/", indexHandler)
 	http.HandleFunc("/view/", makeHandler(viewHandler))
 	http.HandleFunc("/edit/", makeHandler(editHandler))
 	http.HandleFunc("/save/", makeHandler(saveHandler))
