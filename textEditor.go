@@ -14,6 +14,10 @@ type Editor struct {
 	Text  []byte
 }
 
+type Editors struct {
+	FileName []string
+}
+
 func (editor *Editor) save() error {
 	dir, _ := os.Getwd()
 	os.Chdir(dir + "/files")
@@ -84,7 +88,18 @@ func makeHandler(function func(http.ResponseWriter, *http.Request, string)) http
 }
 
 func indexHandler(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintf(w, "this is index place.")
+	files, err := ioutil.ReadDir("files/")
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+	}
+	filename := make([]string, 0)
+	for _, file := range files {
+		filename = append(filename, strings.Split(file.Name(), ".")[0])
+	}
+	fmt.Println(filename)
+	editors := &Editors{FileName: filename}
+
+	fmt.Println(editors.FileName)
 }
 
 func main() {
@@ -92,5 +107,5 @@ func main() {
 	http.HandleFunc("/view/", makeHandler(viewHandler))
 	http.HandleFunc("/edit/", makeHandler(editHandler))
 	http.HandleFunc("/save/", makeHandler(saveHandler))
-	http.ListenAndServe(":8070", nil)
+	http.ListenAndServe(":8080", nil)
 }
