@@ -99,7 +99,10 @@ func indexHandler(w http.ResponseWriter, r *http.Request) {
 	fmt.Println(filename)
 	editors := &Editors{FileName: filename}
 
-	fmt.Println(editors.FileName)
+	err1 := templates.ExecuteTemplate(w, "index.html", editors)
+	if err1 != nil {
+		http.Error(w, err1.Error(), http.StatusInternalServerError)
+	}
 }
 
 func main() {
