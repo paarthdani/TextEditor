@@ -1,7 +1,7 @@
 <html>
     <h1 style="text-align: center;">TextEditor</h1>
     <h3>{{ range $i := .FileName}}
-        {{$i}}.txt
+        <a style="text-decoration: none; color: blue;" href="/edit/{{$i}}">{{$i}}.txt</a>
         <br/>
         {{end}}</h3>
 </html>
