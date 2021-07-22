@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"html/template"
 	"io/ioutil"
 	"net/http"
@@ -96,7 +95,6 @@ func indexHandler(w http.ResponseWriter, r *http.Request) {
 	for _, file := range files {
 		filename = append(filename, strings.Split(file.Name(), ".")[0])
 	}
-	fmt.Println(filename)
 	editors := &Editors{FileName: filename}
 
 	err1 := templates.ExecuteTemplate(w, "index.html", editors)
